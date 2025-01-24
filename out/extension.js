@@ -38,33 +38,37 @@ exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
-// This method is called when your extension is activated
 function activate(context) {
     console.log('Congratulations, your extension "qbraid-chat" is now active!');
-    // Register the command that opens the chat UI
     let disposable = vscode.commands.registerCommand('qbraid-chat.openChat', () => {
-        // Create a new webview panel
         const panel = vscode.window.createWebviewPanel('qbraid-chat', // Panel ID
         'qBraid Chat', // Panel Title
         vscode.ViewColumn.One, // Show in the first column
         {
-            enableScripts: true, // Allow JavaScript in the webview
-            localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'media'))] // Allow access to local resources
+            enableScripts: true,
+            localResourceRoots: [
+                vscode.Uri.file(path.join(context.extensionPath, 'media')), // Restrict access to the 'media' folder
+            ],
         });
-        // Path to the index.html file inside the media folder
+        // Path to index.html file
         const indexHtmlPath = path.join(context.extensionPath, 'media', 'index.html');
+        // Check if the file exists to avoid errors
+        if (!fs.existsSync(indexHtmlPath)) {
+            vscode.window.showErrorMessage('Unable to load the chat UI. index.html not found.');
+            return;
+        }
+        // Read the index.html content
         const htmlContent = fs.readFileSync(indexHtmlPath, 'utf8');
-        // Replace local resource links with webview-compatible URIs
+        // Resolve the URIs for script.js and style.css
         const scriptUri = panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'script.js')));
         const styleUri = panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'style.css')));
-        // Update the HTML content with resource links for webview
+        // Replace resource links in the HTML
         const webviewHtml = htmlContent
-            .replace(/<script src="script\.js"><\/script>/, `<script src="${scriptUri}"></script>`)
-            .replace(/<link rel="stylesheet" href="style\.css" \/>/, `<link rel="stylesheet" href="${styleUri}" />`);
+            .replace(/<script src=".*?script\.js"><\/script>/, `<script src="${scriptUri}"></script>`)
+            .replace(/<link rel="stylesheet" href=".*?style\.css"\s*\/?>/, `<link rel="stylesheet" href="${styleUri}" />`);
         // Set the webview's HTML content
         panel.webview.html = webviewHtml;
     });
     context.subscriptions.push(disposable);
 }
-// This method is called when your extension is deactivated
 function deactivate() { }

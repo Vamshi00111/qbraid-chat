@@ -78,8 +78,10 @@ document.getElementById('send-message').addEventListener('click', () => {
     .then(response => response.json())
     .then(response => {
       const chatBox = document.getElementById('chat-box');
-      chatBox.innerHTML += `<div class="message">${response.content}</div>`;
+      chatBox.innerHTML += `<div class="message client">${message}</div>`;
+      chatBox.innerHTML += `<div class="message server">${response.content}</div>`;
       document.getElementById('chat-input').value = ''; // Clear input
+      chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
     })
     .catch(err => console.error(err));
 });

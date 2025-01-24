@@ -39,5 +39,10 @@
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.16.0",
     "typescript": "^5.7.3"
-  }
+  },
+  "files": [
+  "out",  
+  "media", 
+  "src"   
+  ]
 }
