@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qBraid Chat Extension</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="api-key-container">
+        <label for="api-key">Enter your API Key:</label>
+        <input type="text" id="api-key" placeholder="Your API Key" />
+        <button id="submit-api-key">Submit</button>
+    </div>
+
+    <div id="model-selection"></div>
+
+    <div id="chat-container" style="display: none;">
+        <div id="chat-box" class="chat-box"></div>
+        <textarea id="chat-input" placeholder="Type your message..."></textarea>
+        <button id="send-message">Send</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
