@@ -2,7 +2,7 @@
   "name": "qbraid-chat",
   "displayName": "qbraid-chat",
   "description": "A VS Code extension for qBraid Chat",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.96.0"
   },
